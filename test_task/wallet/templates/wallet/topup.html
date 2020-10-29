@@ -12,7 +12,7 @@
         {% endblock %}
     </h1>
     <h4>
-        Convert money inside account
+        Top up money to account.
     </h4>
     <br>
     <h4>
@@ -42,18 +42,19 @@
         {% endblock %}
     </h8>
     <br>
-    <h4>
-        Converting
-    </h4>
+    <h6>
+        Only imitation of top up . 
+        You can add any amount of fictitious money.
+    </h6>
     <br>
     <h4>
-        How much money transferred
+        How much money top up?
     </h4>  
     {% block form %}
     <form action="/convert/"  method="post">
         {% csrf_token %} 
-        <label for="initial_money">From:</label>
-        <select  name="from" class="from">
+        <label for="initial_money">Currency:</label>
+        <select  name="currency" class="from">
             <option value="RUB">&#8381</option>
             <option value="EUR">&#8364</option>
             <option value="USD">&#36</option>
@@ -61,11 +62,7 @@
         <br><br>
 
         <label for="finite_money">To:</label>
-        <select name='to' class="to">
-            <option value="RUB">&#8381</option>
-            <option value="EUR">&#8364</option>
-            <option value="USD">&#36</option>
-        </select>
+
         <br><br>
         <input type="text" name='amount' class='amount'><br><br>
         {{ error }}

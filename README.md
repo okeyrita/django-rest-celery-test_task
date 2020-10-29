@@ -14,7 +14,7 @@ Implement __Django + Django Rest framework backend__ with the following conditio
 
 * Transferring money between users
 
-* Daily __celery__ task to synchronize currencies with an online service. (ex. [link](https://www.cbr-xml-daily.ru/daily.xml​))
+* Daily __Сelery__ task to synchronize currencies with an online service. (ex. [link](https://www.cbr-xml-daily.ru/daily.xml​))
 
 ## Content of the project
 
@@ -61,6 +61,11 @@ _password_: LuckySmile
 
 Used default Django database __sqlite3__
 
+#### Celery
+
+Used Celery documentatioon [link](https://docs.celeryproject.org/en/stable/) .
+Add Celery daily task to save and parse file with rates of money. 
+
 ## How to run 
 
 #### How run locally on your laptop
@@ -71,7 +76,9 @@ git clone https://github.com/okeyrita/django-rest-celery-test_task.git
 ```
 * Go to main directory
 ```
-cd 
+cd django-rest-celery-test_task
+
+cd test_task
 ```
 * Start a local web server
 ```

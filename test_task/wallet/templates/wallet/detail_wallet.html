@@ -54,6 +54,19 @@
     <form method="get" action="../withdraw">
         <button type="withdraw">Withdraw money from the system</button>
     </form>
+    <br><br>
+    <h8>
+        {% block rate %}
+
+         Todays rate of money:
+         <br>
+         1 &#8364 = {{ rate_eur }} rub 
+         <br>
+         1 &#36 = {{ rate_usd }} rub
+
+        {% endblock %}
+    </h8>
+
 
 </body>
 

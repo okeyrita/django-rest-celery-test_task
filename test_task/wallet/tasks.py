@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from test_task.celery import app
+import re
 
 import xml.etree.ElementTree as ET
 import requests
@@ -11,8 +12,8 @@ import json
 
 URL = 'https://www.cbr-xml-daily.ru/daily.xml'
 DATA_PATH = 'data/'
-FILENAME = 'data.csv'
-DATA_FILE = 'currency.txt'
+FILENAME = 'data.xml'
+DATA_FILE = 'currency.json'
 
 LOGGER = logging.getLogger(__file__)
 
@@ -31,11 +32,11 @@ def daily_request():
         if elem.tag == "Valute" and event == "start":
             if elem.get('ID') == 'R01239':
                 data.update({
-                    'EUR': elem.find('Value').text
+                    'EUR': re.sub(r'\.', r'\,', elem.find('Value').text)
                 })
             elif elem.get('ID') == 'R01235':
                 data.update({
-                    'USD': elem.find('Value').text
+                    'USD': re.sub(r'\.', r'\,', elem.find('Value').text)
                 })
 
     with open(DATA_PATH+DATA_FILE, "w", encoding="utf-8") as filee:
