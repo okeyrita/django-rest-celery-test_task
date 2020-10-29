@@ -52,46 +52,41 @@ def convert_money(request):
             pass
 
         else:
-            if from_currency == 'UER':
-                # Convert to rubles
-                first = user_data.amount_euro * float(data_rate.get('UER'))
+            substract_from = amount_money
+            add_to = amount_money * \
+                float(data_rate.get(from_currency, 1)) / \
+                float(data_rate.get(to_currency, 1))
 
-            elif from_currency == 'USD':
-                # Convert to rubles
-                first = user_data.amount_dollars * float(data_rate.get('USD'))
+            if from_currency == 'UER' and user_data.amount_euro < substract_from or \
+                    from_currency == 'USD' and user_data.amount_dollars < substract_from or \
+                    from_currency == 'RUB' and user_data.amount_rubles < substract_from:
 
-            else:
-                first = user_data.amount_rubles
-
-            if first < amount_money * float(data_rate.get(from_currency, 1)):
                 error = 'Cant convert money. You have not enough money.'
 
             else:
-                second = first / float(data_rate.get(to_currency, 1))
+                if from_currency == 'EUR':
+                    user_data.amount_euro = user_data.amount_euro - substract_from
+                    user_data.save()
+
+                elif from_currency == 'USD':
+                    user_data.amount_dollars = user_data.amount_dollars - substract_from
+                    user_data.save()
+
+                else:
+                    user_data.amount_rubles = user_data.amount_rubles - substract_from
+                    user_data.save()
 
                 if to_currency == 'EUR':
-                    user_data.update(amount_euro=user_data.get(
-                        'amount_euro') + second)
+                    user_data.amount_euro = user_data.amount_euro + add_to
+                    user_data.save()
 
                 elif to_currency == 'USD':
-                    user_data.update(amount_dollars=user_data.get(
-                        'amount_dollars') + second)
+                    user_data.amount_dollars = user_data.amount_dollars + add_to
+                    user_data.save()
 
                 else:
-                    user_data.update(amount_rubles=user_data.get(
-                        'amount_rubles') + second)
-
-                if from_currency == 'EUR':
-                    user_data.update(amount_euro=user_data.get(
-                        'amount_euro') - amount_money)
-
-                elif to_currency == 'USD':
-                    user_data.update(amount_dollars=user_data.get(
-                        'amount_dollars') - amount_money)
-
-                else:
-                    user_data.update(amount_rubles=user_data.get(
-                        'amount_rubles') - amount_money)
+                    user_data.amount_rubles = user_data.amount_rubles + add_to
+                    user_data.save()
 
     name_user = str(request.user.username)
     return render(request, 'wallet/convert.html',
@@ -108,6 +103,7 @@ def transfer_money(request):
     '''
     Transfer money to another account.
     '''
+    pass
 
 
 @login_required
@@ -117,8 +113,25 @@ def top_up_account(request):
     '''
     data_rate = return_todays_rate()
     user_data = Wallets.objects.get(user=request.user)
-    name_user = str(request.user.username)
 
+    if request.method == 'POST':
+        data = request.POST
+        currency = data.get('currency')
+        amount_money = float(data.get('amount'))
+
+        if currency == 'EUR':
+            user_data.amount_euro = user_data.amount_euro + amount_money
+            user_data.save()
+
+        elif currency == 'USD':
+            user_data.amount_dollars = user_data.amount_dollars + amount_money
+            user_data.save()
+
+        else:
+            user_data.amount_rubles = user_data.amount_rubles + amount_money
+            user_data.save()
+
+    name_user = str(request.user.username)
     return render(request, 'wallet/topup.html',
                   {'user_data': user_data,
                    'name': name_user,
@@ -128,7 +141,47 @@ def top_up_account(request):
 
 
 @login_required
-def withdraw_money(request, user_id):
+def withdraw_money(request):
     '''
     Withdraw money from the system.
     '''
+    data_rate = return_todays_rate()
+    user_data = Wallets.objects.get(user=request.user)
+    error = ''
+
+    if request.method == 'POST':
+        data = request.POST
+        currency = data.get('currency')
+        amount_money = float(data.get('amount'))
+
+        if currency == 'EUR':
+            if user_data.amount_euro - amount_money >= 0:
+                user_data.amount_euro = user_data.amount_euro - amount_money
+                user_data.save()
+
+            else:
+                error = 'Cant withdraw money. You have not enough money.'
+
+        elif currency == 'USD':
+            if user_data.amount_dollars - amount_money >= 0:
+                user_data.amount_dollars = user_data.amount_dollars - amount_money
+                user_data.save()
+
+            else:
+                error = 'Cant withdraw money. You have not enough money.'
+
+        else:
+            if user_data.amount_rubles - amount_money >= 0:
+                user_data.amount_rubles = user_data.amount_rubles - amount_money
+                user_data.save()
+            else:
+                error = 'Cant withdraw money. You have not enough money.'
+
+    name_user = str(request.user.username)
+    return render(request, 'wallet/withdraw.html',
+                  {'user_data': user_data,
+                   'name': name_user,
+                   'rate_eur': data_rate.get('EUR'),
+                   'rate_usd': data_rate.get('USD'),
+                   'error': error
+                   })

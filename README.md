@@ -65,6 +65,9 @@ Used default Django database __sqlite3__
 
 Used Celery documentatioon [link](https://docs.celeryproject.org/en/stable/) .
 Add Celery daily task to save and parse file with rates of money. 
+#### Django rest framework 
+
+__In current version of the project Django Rest framework didn't used. Here is standard Django api.__
 
 ## How to run 
 

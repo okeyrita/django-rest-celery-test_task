@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Convert money</title>
+    <title>Topup money</title>
 </head>
 
 <body>
@@ -42,16 +42,17 @@
         {% endblock %}
     </h8>
     <br>
-    <h6>
+    <h4>
         Only imitation of top up . 
+        <br>
         You can add any amount of fictitious money.
-    </h6>
+    </h4>
     <br>
     <h4>
         How much money top up?
     </h4>  
     {% block form %}
-    <form action="/convert/"  method="post">
+    <form action="/topup/"  method="post">
         {% csrf_token %} 
         <label for="initial_money">Currency:</label>
         <select  name="currency" class="from">
@@ -65,8 +66,7 @@
 
         <br><br>
         <input type="text" name='amount' class='amount'><br><br>
-        {{ error }}
-        <button type="submit" class="btn btn-success">Convert</button>
+        <button type="submit" class="btn btn-success">Top up</button>
     </form>
     {% endblock %}
     <br><br>
