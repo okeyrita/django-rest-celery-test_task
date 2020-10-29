@@ -103,7 +103,53 @@ def transfer_money(request):
     '''
     Transfer money to another account.
     '''
-    pass
+    data_rate = return_todays_rate()
+    user_data = Wallets.objects.get(user=request.user)
+    name_user = str(request.user.username)
+    error = ''
+    if request.method == 'POST':
+        data = request.POST
+        print(data)
+        target_username = data.get('user')
+        currency = data.get('currency')
+        amount = float(data.get('amount'))
+
+        target_user = User.objects.get(username=target_username)
+        target_wallet = Wallets.objects.get(user=target_user)
+
+        if currency == 'EUR' and user_data.amount_euro > amount:
+            target_wallet.amount_euro = target_wallet.amount_euro + amount
+            target_wallet.save()
+
+            user_data.amount_euro = user_data.amount_euro - amount
+            user_data.save()
+
+        elif currency == 'USD' and user_data.amount_dollars > amount:
+            target_wallet.amount_dollars = target_wallet.amount_dollars + amount
+            target_wallet.save()
+
+            user_data.amount_dollars = user_data.amount_dollars - amount
+            user_data.save()
+        elif currency == 'RUB' and user_data.amount_rubles > amount:
+            target_wallet.amount_rubles = target_wallet.amount_rubles + amount
+            target_wallet.save()
+
+            user_data.amount_rubles = user_data.amount_rubles - amount
+            user_data.save()
+        else:
+            error = 'You have not enough money for transferring.'
+
+    all_users = User.objects.all().exclude(
+        username='admin').exclude(username=name_user)
+
+    return render(request, 'wallet/transfer.html',
+                  {'user_data': user_data,
+                   'name': name_user,
+                   'rate_eur': data_rate.get('EUR'),
+                   'rate_usd': data_rate.get('USD'),
+                   'all_users': all_users,
+                   'error': error
+                   })
 
 
 @login_required

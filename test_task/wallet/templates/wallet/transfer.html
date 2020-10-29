@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Transfer money</title>
+</head>
+
+<body>
+    <h1>
+        {% block name %}
+        User: {{ name }}
+        {% endblock %}
+    </h1>
+    <h4>
+        Transfer money to another user
+    </h4>
+    <br>
+    <h4>
+        Your current money
+    </h4>
+    <h8>
+        {% block rubles %}
+
+        RUBLES: {{ user_data.amount_rubles}} &#8381
+
+        {% endblock %}
+    </h8>
+    <br>
+    <h8>
+        {% block euro %}
+
+        EURO: {{ user_data.amount_euro}} &#8364
+
+        {% endblock %}
+    </h8>
+    <br>
+    <h8>
+        {% block dollars %}
+
+        DOLLARS: {{ user_data.amount_dollars}} &#36
+
+        {% endblock %}
+    </h8>
+    <br>
+    <br>
+    <h4>
+        Transferring
+    </h4>  
+    {% block form %}
+    <form action="/transfer/"  method="post">
+        {% csrf_token %} 
+        <label for="initial_money">Currency:</label>
+        <select  name="currency" class="from">
+            <option value="RUB">&#8381</option>
+            <option value="EUR">&#8364</option>
+            <option value="USD">&#36</option>
+        </select>
+        <br><br>
+        <label for="initial_money">Target User:</label>
+        <select  name="user" class="from">
+            {% for element in all_users %}
+                <option value= {{ element }} >{{ element }}</option>
+
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label for="finite_money">Amount money:</label>
+
+        <input type="text" name='amount' class='amount'><br><br>
+        <button type="submit" class="btn btn-success">Transfer</button>
+    </form>
+
+    {% endblock %}
+
+    <br><br>
+    <h8>
+        {% block rate %}
+
+         Todays rate of money:
+         <br>
+         1 &#8364 = {{ rate_eur }} rub 
+         <br>
+         1 &#36 = {{ rate_usd }} rub
+
+        {% endblock %}
+    </h8>
+</body>
+
+</html>

@@ -57,6 +57,8 @@ _password_: LuckySmile
 2. _login_: Masha 
 _password_: LuckySmile
 
+3. _login_: Sasha 
+_password_: LuckySmile
 #### Database
 
 Used default Django database __sqlite3__
