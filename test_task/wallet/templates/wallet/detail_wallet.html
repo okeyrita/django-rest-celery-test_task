@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>User wallets</title>
+</head>
+
+<body>
+    <h1>
+        {% block name %}
+        User: {{ name }}
+        {% endblock %}
+    </h1>
+    <h4>
+        Wallets:
+    </h4>
+    <h8>
+        {% block rubles %}
+
+        RUBLES: {{ user_data.amount_rubles}} &#8381
+
+        {% endblock %}
+    </h8>
+    <br>
+    <h8>
+        {% block euro %}
+
+        EURO: {{ user_data.amount_euro}} &#8364
+
+        {% endblock %}
+    </h8>
+    <br>
+    <h8>
+        {% block dollars %}
+
+        DOLLARS: {{ user_data.amount_dollars}} &#36
+
+        {% endblock %}
+    </h8>
+    <br>
+    <br>
+    <form method="get" action="../convert">
+        <button type="convert">Convert money inside account</button>
+    </form>
+    <br>
+    <form method="get" action="../transfer">
+        <button type="transfer">Transfer money to another account</button>
+    </form>
+    <br>
+    <form method="get" action="../topup">
+        <button type="topup">Top up account</button>
+    </form>
+    <br>
+    <form method="get" action="../withdraw">
+        <button type="withdraw">Withdraw money from the system</button>
+    </form>
+
+</body>
+
+</html>

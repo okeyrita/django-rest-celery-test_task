@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Convert money</title>
+</head>
+
+<body>
+    <h1>
+        {% block name %}
+        User: {{ name }}
+        {% endblock %}
+    </h1>
+    <h4>
+        Convert money inside account
+    </h4>
+    <br>
+    <h4>
+        Your current money
+    </h4>
+    <h8>
+        {% block rubles %}
+
+        RUBLES: {{ user_data.amount_rubles}} &#8381
+
+        {% endblock %}
+    </h8>
+    <br>
+    <h8>
+        {% block euro %}
+
+        EURO: {{ user_data.amount_euro}} &#8364
+
+        {% endblock %}
+    </h8>
+    <br>
+    <h8>
+        {% block dollars %}
+
+        DOLLARS: {{ user_data.amount_dollars}} &#36
+
+        {% endblock %}
+    </h8>
+    <br>
+    <h4>
+        Converting
+    </h4>
+    <br>
+    <h4>
+        How much money transferred
+    </h4>  
+    {% block form %}
+    <form action="/convert/"  method="post">
+        {% csrf_token %} 
+        <label for="initial_money">From:</label>
+        <select  name="from" class="from">
+            <option value="rubles">&#8381</option>
+            <option value="euro">&#8364</option>
+            <option value="dollars">&#36</option>
+        </select>
+        <br><br>
+
+        <label for="finite_money">To:</label>
+        <select name='to' class="to">
+            <option value="rubles">&#8381</option>
+            <option value="euro">&#8364</option>
+            <option value="dollars">&#36</option>
+        </select>
+        <br><br>
+        <input type="text" name='amount' class='amount'><br><br>
+        <button type="submit" class="btn btn-success">Convert</button>
+    </form>
+    {% endblock %}
+
+</body>
+
+</html>
