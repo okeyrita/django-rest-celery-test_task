@@ -22,9 +22,8 @@ def user_wallets(request):
     Show user data of wallets and available opportunities.
     '''
     user_data = Wallets.objects.get(user=request.user)
-    name_user = str(request.user.username)
     data_rate = return_todays_rate()
-
+    name_user = str(request.user.username)
     return render(request, 'wallet/detail_wallet.html',
                   {'user_data': user_data,
                    'name': name_user,
@@ -38,8 +37,9 @@ def convert_money(request):
     '''
     Convert user money inside account.
     '''
-    data_rate = return_todays_rate()
     user_data = Wallets.objects.get(user=request.user)
+    data_rate = return_todays_rate()
+    name_user = str(request.user.username)
     error = ''
 
     if request.method == 'POST':
@@ -88,7 +88,6 @@ def convert_money(request):
                     user_data.amount_rubles = user_data.amount_rubles + add_to
                     user_data.save()
 
-    name_user = str(request.user.username)
     return render(request, 'wallet/convert.html',
                   {'user_data': user_data,
                    'name': name_user,
@@ -103,8 +102,8 @@ def transfer_money(request):
     '''
     Transfer money to another account.
     '''
-    data_rate = return_todays_rate()
     user_data = Wallets.objects.get(user=request.user)
+    data_rate = return_todays_rate()
     name_user = str(request.user.username)
     error = ''
     if request.method == 'POST':
@@ -157,9 +156,9 @@ def top_up_account(request):
     '''
     Top up an account.
     '''
-    data_rate = return_todays_rate()
     user_data = Wallets.objects.get(user=request.user)
-
+    data_rate = return_todays_rate()
+    name_user = str(request.user.username)
     if request.method == 'POST':
         data = request.POST
         currency = data.get('currency')
@@ -177,7 +176,6 @@ def top_up_account(request):
             user_data.amount_rubles = user_data.amount_rubles + amount_money
             user_data.save()
 
-    name_user = str(request.user.username)
     return render(request, 'wallet/topup.html',
                   {'user_data': user_data,
                    'name': name_user,
@@ -191,8 +189,9 @@ def withdraw_money(request):
     '''
     Withdraw money from the system.
     '''
-    data_rate = return_todays_rate()
     user_data = Wallets.objects.get(user=request.user)
+    data_rate = return_todays_rate()
+    name_user = str(request.user.username)
     error = ''
 
     if request.method == 'POST':
@@ -223,7 +222,6 @@ def withdraw_money(request):
             else:
                 error = 'Cant withdraw money. You have not enough money.'
 
-    name_user = str(request.user.username)
     return render(request, 'wallet/withdraw.html',
                   {'user_data': user_data,
                    'name': name_user,

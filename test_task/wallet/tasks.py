@@ -32,11 +32,11 @@ def daily_request():
         if elem.tag == "Valute" and event == "start":
             if elem.get('ID') == 'R01239':
                 data.update({
-                    'EUR': re.sub(r'\.', r'\,', elem.find('Value').text)
+                    'EUR': re.sub(r'\,', r'.', elem.find('Value').text)
                 })
             elif elem.get('ID') == 'R01235':
                 data.update({
-                    'USD': re.sub(r'\.', r'\,', elem.find('Value').text)
+                    'USD': re.sub(r'\,', r'.', elem.find('Value').text)
                 })
 
     with open(DATA_PATH+DATA_FILE, "w", encoding="utf-8") as filee:
